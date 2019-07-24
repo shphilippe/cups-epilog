@@ -163,7 +163,7 @@
 #define HPGLY (0)
 
 /** Whether or not to rotate the incoming PDF 90 degrees clockwise. */
-#define PDF_ROTATE_90 (1)
+#define PDF_ROTATE_90 (0)
 
 /** Accepted number of points per an inch. */
 #define POINTS_PER_INCH (72)
@@ -377,7 +377,7 @@ execute_ghostscript(char *filename_bitmap,
     char buf[8192];
     sprintf(buf,
             "/usr/bin/gs -q -dBATCH -dNOPAUSE -r%d -g%dx%d -sDEVICE=%s \
--sOutputFile=%s %s > %s",
+-sOutputFile=%s.bmp %s > %s",
             resolution,
             (width * resolution) / POINTS_PER_INCH,
             (height * resolution) / POINTS_PER_INCH,
@@ -391,6 +391,16 @@ execute_ghostscript(char *filename_bitmap,
     if (system(buf)) {
         return false;
     }
+    sprintf(buf, "convert -flip %s.bmp %s", filename_bitmap, filename_bitmap);
+    if (debug) {
+        fprintf(stderr, "%s\n", buf);
+    }
+    if (system(buf)) {
+        return false;
+    }
+    sprintf(buf, "%s.bmp", filename_bitmap);
+    unlink(buf);
+    
     return true;
 }
 
@@ -480,11 +490,9 @@ generate_raster(FILE *pjl_file, FILE *bitmap_file)
         fprintf(pjl_file, "\e&z%dS", raster_speed);
         fprintf(pjl_file, "\e*r%dT", height * y_repeat);
         fprintf(pjl_file, "\e*r%dS", width * x_repeat);
-        /* Raster compression */
-        fprintf(pjl_file, "\e*b%dM", (raster_mode == 'c' || raster_mode == 'g')
-                ? 7 : 2);
+
         /* Raster direction (1 = up) */
-        fprintf(pjl_file, "\e&y1O");
+        fprintf(pjl_file, "\e&y0O");
 
         if (debug) {
             /* Output raster debug information */
@@ -501,10 +509,9 @@ generate_raster(FILE *pjl_file, FILE *bitmap_file)
                 for (pass = 0; pass < passes; pass++) {
                     // raster (basic)
                     int y;
-                    char dir = 0;
 
                     fseek(bitmap_file, base_offset, SEEK_SET);
-                    for (y = height - 1; y >= 0; y--) {
+                    for (y = 0; y < height; y++) {
                         int l;
 
                         switch (raster_mode) {
@@ -601,7 +608,6 @@ generate_raster(FILE *pjl_file, FILE *bitmap_file)
                         if (l < h) {
                             /* a line to print */
                             int r;
-                            int n;
                             unsigned char pack[sizeof (buf) * 5 / 4 + 1];
                             for (r = h - 1; r > l && !buf[r]; r--) {
                                 ;
@@ -610,64 +616,18 @@ generate_raster(FILE *pjl_file, FILE *bitmap_file)
                             fprintf(pjl_file, "\e*p%dY", basey + offy + y);
                             fprintf(pjl_file, "\e*p%dX", basex + offx +
                                     ((raster_mode == 'c' || raster_mode == 'g') ? l : l * 8));
-                            if (dir) {
-                                fprintf(pjl_file, "\e*b%dA", -(r - l));
-                                // reverse bytes!
-                                for (n = 0; n < (r - l) / 2; n++){
-                                    unsigned char t = buf[l + n];
-                                    buf[l + n] = buf[r - n - 1];
-                                    buf[r - n - 1] = t;
-                                }
-                            } else {
-                                fprintf(pjl_file, "\e*b%dA", (r - l));
-                            }
-                            dir = 1 - dir;
-                            // pack
-                            n = 0;
-                            while (l < r) {
-                                int p;
-                                for (p = l; p < r && p < l + 128 && buf[p]
-                                         == buf[l]; p++) {
-                                    ;
-                                }
-                                if (p - l >= 2) {
-                                    // run length
-                                    pack[n++] = 257 - (p - l);
-                                    pack[n++] = buf[l];
-                                    l = p;
-                                } else {
-                                    for (p = l;
-                                         p < r && p < l + 127 &&
-                                             (p + 1 == r || buf[p] !=
-                                              buf[p + 1]);
-                                         p++) {
-                                        ;
-                                    }
 
-                                    pack[n++] = p - l - 1;
-                                    while (l < p) {
-                                        pack[n++] = buf[l++];
-                                    }
-                                }
-                            }
-                            fprintf(pjl_file, "\e*b%dW", (n + 7) / 8 * 8);
-                            r = 0;
-                            while (r < n)
-                                fputc(pack[r++], pjl_file);
-                            while (r & 7)
-                            {
-                                r++;
-                                fputc(0x80, pjl_file);
-                            }
+                            fprintf(pjl_file, "\e*b%dW", r - l);
+                            while (l < r)
+                                fputc(buf[l++], pjl_file);
                         }
                     }
                 }
             }
         }
         fprintf(pjl_file, "\e*rC");       // end raster
-        fputc(26, pjl_file);      // some end of file markers
-        fputc(4, pjl_file);
     }
+    fprintf(pjl_file, "\e%%1BPU");  // start HLGL, and pen up, end
     return true;
 }
 
@@ -861,10 +821,6 @@ generate_pjl(FILE *bitmap_file, FILE *pjl_file,
      * information to the print job.
      */
     if (raster_power && raster_mode != 'n') {
-
-        /* FIXME unknown purpose. */
-        fprintf(pjl_file, "\e&y0C");
-
         /* We're going to perform a raster print. */
         generate_raster(pjl_file, bitmap_file);
     }
@@ -891,10 +847,6 @@ generate_pjl(FILE *bitmap_file, FILE *pjl_file,
     fprintf(pjl_file, "\e%%-12345X");
     /* End job. */
     fprintf(pjl_file, "@PJL EOJ \r\n");
-    /* Pad out the remainder of the file with 0 characters. */
-    for(i = 0; i < 4096; i++) {
-        fputc(0, pjl_file);
-    }
     return true;
 }
 

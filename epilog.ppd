@@ -1,0 +1,215 @@
+*PPD-Adobe: "4.3"
+*%
+*%
+*% CUPS-LAOS>PPD
+*% 
+*% Printer definition for CUPS-LAOS Open Source laser cutter
+*%
+*%   Based on Sample Postscript driver PPD file for the Common UNIX Printing
+*%   System (CUPS). Page setting parts copied from Adobe distiller PPD file (to be removed)
+*%
+*%   Michael Goffioul <goffioul@emic.ucl.ac.be>
+*%
+*%   Changes to the original file by Volker Behr, Martin-Eric Racine, 
+*%   Nickolay Kondrashov and other contributors:
+*%   added IEEE-1284 device id     - 2008-03-24
+*%   added custom page size        - 2006-05-18
+*%   replaced page descriptions    - 2006-05-18
+*%   InputSlot constraints removed - 2006-05-11
+*%   maxed out imageable regions   - 2006-05-11
+*%   added pstitleiconv filter     - 2006-05-11
+*%   added ledger paper size       - 2006-01-29
+*%   match Adobe specifications    - 2005-12-23
+*%   additional paper formats      - 2005-02-03 and 2005-02-07
+*%   made A4 default paper size    - 2005-02-03
+*%   Color enabled                 - 2003-12-02
+*%
+*FormatVersion:	"4.3"
+*FileVersion:	"1.1"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName:	"CUPS-EPILOG.PPD"
+*Manufacturer:	"Generic"
+*Product:	"(CUPS v1.1)"
+*ModelName:     "Generic CUPS-Epilog Printer"
+*ShortNickName: "Generic CUPS-Epilog Printer"
+*NickName:      "Generic CUPS-Epilog Printer"
+*1284DeviceID:  "MFG:Generic;MDL:CUPS-Epilog Printer;DES:Generic CUPS-Epilog Printer;CLS:PRINTER;CMD:POSTSCRIPT;"
+*% cupsFilter:    "application/vnd.cups-postscript 0 pstitleiconv"
+*PSVersion:	"(2017.000) 0"
+*LanguageLevel:	"2"
+*ColorDevice:	True
+*DefaultColorSpace: RGB
+*FileSystem:	False
+*Throughput:	"8"
+*LandscapeOrientation: Plus90
+*TTRasterizer:	None
+
+*OpenGroup: General/Laser Settings
+
+*OpenUI *LaserCuttingSpeed/Cutting Speed: PickOne
+*OrderDependency: 100 AnySetup *LaserCuttingSpeed
+*DefaultLaserCuttingSpeed: v5
+*LaserCuttingSpeed v1/1 %: ""
+*LaserCuttingSpeed v2/2 %: ""
+*LaserCuttingSpeed v3/3 %: ""
+*LaserCuttingSpeed v4/4 %: ""
+*LaserCuttingSpeed v5/5 %: ""
+*LaserCuttingSpeed v6/6 %: ""
+*LaserCuttingSpeed v7/7 %: ""
+*LaserCuttingSpeed v8/8 %: ""
+*LaserCuttingSpeed v9/9 %: ""
+*LaserCuttingSpeed v10/10 %: ""
+*LaserCuttingSpeed v20/20 %: ""
+*LaserCuttingSpeed v30/30 %: ""
+*LaserCuttingSpeed v40/40 %: ""
+*LaserCuttingSpeed v50/50 %: ""
+*LaserCuttingSpeed v60/60 %: ""
+*LaserCuttingSpeed v70/70 %: ""
+*LaserCuttingSpeed v80/80 %: ""
+*LaserCuttingSpeed v90/90 %: ""
+*LaserCuttingSpeed v100/100 %: ""
+*CloseUI: *LaserCuttingSpeed
+
+*OpenUI *LaserCuttingPower/Cutting Power: PickOne
+*OrderDependency: 100 AnySetup *LaserCuttingPower
+*DefaultLaserCuttingPower: 100%
+*LaserCuttingPower 10%/10 %: ""
+*LaserCuttingPower 20%/20 %: ""
+*LaserCuttingPower 30%/30 %: ""
+*LaserCuttingPower 40%/40 %: ""
+*LaserCuttingPower 50%/50 %: ""
+*LaserCuttingPower 60%/60 %: ""
+*LaserCuttingPower 70%/70 %: ""
+*LaserCuttingPower 80%/80 %: ""
+*LaserCuttingPower 90%/90 %: ""
+*LaserCuttingPower 100%/100 %: ""
+*CloseUI: *LaserCuttingPower
+
+*OpenUI *LaserCuttingFrequency/Cutting Frequency: PickOne
+*OrderDependency: 100 AnySetup *LaserCuttingFrequency
+*DefaultLaserCuttingFrequency: f5000
+*LaserCuttingFrequency f10/10: ""
+*LaserCuttingFrequency f20/20: ""
+*LaserCuttingFrequency f50/50: ""
+*LaserCuttingFrequency f100/100: ""
+*LaserCuttingFrequency f200/200: ""
+*LaserCuttingFrequency f300/300: ""
+*LaserCuttingFrequency f400/400: ""
+*LaserCuttingFrequency f500/500: ""
+*LaserCuttingFrequency f600/600: ""
+*LaserCuttingFrequency f700/700: ""
+*LaserCuttingFrequency f800/800: ""
+*LaserCuttingFrequency f900/900: ""
+*LaserCuttingFrequency f1000/1000: ""
+*LaserCuttingFrequency f1100/1100: ""
+*LaserCuttingFrequency f1200/1200: ""
+*LaserCuttingFrequency f1300/1300: ""
+*LaserCuttingFrequency f1400/1400: ""
+*LaserCuttingFrequency f1500/1500: ""
+*LaserCuttingFrequency f1600/1600: ""
+*LaserCuttingFrequency f1700/1700: ""
+*LaserCuttingFrequency f1800/1800: ""
+*LaserCuttingFrequency f1900/1900: ""
+*LaserCuttingFrequency f2000/2000: ""
+*LaserCuttingFrequency f2100/2100: ""
+*LaserCuttingFrequency f2200/2200: ""
+*LaserCuttingFrequency f2300/2300: ""
+*LaserCuttingFrequency f2400/2400: ""
+*LaserCuttingFrequency f2500/2500: ""
+*LaserCuttingFrequency f2600/2600: ""
+*LaserCuttingFrequency f2700/2700: ""
+*LaserCuttingFrequency f2800/2800: ""
+*LaserCuttingFrequency f2900/2900: ""
+*LaserCuttingFrequency f3000/3000: ""
+*LaserCuttingFrequency f3100/3100: ""
+*LaserCuttingFrequency f3200/3200: ""
+*LaserCuttingFrequency f3300/3300: ""
+*LaserCuttingFrequency f3400/3400: ""
+*LaserCuttingFrequency f3500/3500: ""
+*LaserCuttingFrequency f3600/3600: ""
+*LaserCuttingFrequency f3700/3700: ""
+*LaserCuttingFrequency f3800/3800: ""
+*LaserCuttingFrequency f3900/3900: ""
+*LaserCuttingFrequency f4000/3000: ""
+*LaserCuttingFrequency f4100/4100: ""
+*LaserCuttingFrequency f4200/4200: ""
+*LaserCuttingFrequency f4300/4300: ""
+*LaserCuttingFrequency f4400/4400: ""
+*LaserCuttingFrequency f4500/4500: ""
+*LaserCuttingFrequency f4600/4600: ""
+*LaserCuttingFrequency f4700/4700: ""
+*LaserCuttingFrequency f4800/4800: ""
+*LaserCuttingFrequency f4900/4900: ""
+*LaserCuttingFrequency f5000/5000: ""
+*CloseUI: *LaserCuttingFrequency
+
+
+
+*OpenUI *LaserEngravingSpeed/Engraving Speed: PickOne
+*OrderDependency: 100 AnySetup *LaserEngravingSpeed
+*DefaultLaserEngravingSpeed: 70
+*LaserEngravingSpeed 1/1 %: ""
+*LaserEngravingSpeed 2/2 %: ""
+*LaserEngravingSpeed 3/3 %: ""
+*LaserEngravingSpeed 4/4 %: ""
+*LaserEngravingSpeed 5/5 %: ""
+*LaserEngravingSpeed 6/6 %: ""
+*LaserEngravingSpeed 7/7 %: ""
+*LaserEngravingSpeed 8/8 %: ""
+*LaserEngravingSpeed 9/9 %: ""
+*LaserEngravingSpeed 10/10 %: ""
+*LaserEngravingSpeed 20/20 %: ""
+*LaserEngravingSpeed 30/30 %: ""
+*LaserEngravingSpeed 40/40 %: ""
+*LaserEngravingSpeed 50/50 %: ""
+*LaserEngravingSpeed 60/60 %: ""
+*LaserEngravingSpeed 70/70 %: ""
+*LaserEngravingSpeed 80/80 %: ""
+*LaserEngravingSpeed 90/90 %: ""
+*LaserEngravingSpeed 100/100 %: ""
+*CloseUI: *LaserEngravingSpeed
+
+*OpenUI *LaserEngravingPower/Engraving Power: PickOne
+*OrderDependency: 100 AnySetup *LaserEngravingPower
+*DefaultLaserEngravingPower: 5
+*LaserEngravingPower 1/1 %: ""
+*LaserEngravingPower 2/2 %: ""
+*LaserEngravingPower 3/3 %: ""
+*LaserEngravingPower 4/4 %: ""
+*LaserEngravingPower 5/5 %: ""
+*LaserEngravingPower 6/6 %: ""
+*LaserEngravingPower 7/7 %: ""
+*LaserEngravingPower 8/8 %: ""
+*LaserEngravingPower 9/9 %: ""
+*LaserEngravingPower 10/10 %: ""
+*LaserEngravingPower 20/20 %: ""
+*LaserEngravingPower 30/30 %: ""
+*LaserEngravingPower 40/40 %: ""
+*LaserEngravingPower 50/50 %: ""
+*LaserEngravingPower 60/60 %: ""
+*LaserEngravingPower 70/70 %: ""
+*LaserEngravingPower 80/80 %: ""
+*LaserEngravingPower 90/90 %: ""
+*LaserEngravingPower 100/100 %: ""
+*CloseUI: *LaserEngravingPower
+
+*OpenUI *LaserEngravingPPI/Engraving PPI: PickOne
+*OrderDependency: 100 AnySetup *LaserEngravingPPI
+*DefaultLaserEngravingPPI: 300
+*LaserEngravingPPI 150/150 PPI: ""
+*LaserEngravingPPI 200/200 PPI: ""
+*LaserEngravingPPI 300/300 PPI: ""
+*LaserEngravingPPI 400/400 PPI: ""
+*LaserEngravingPPI 600/600 PPI: ""
+*LaserEngravingPPI 1200/1200 PPI: ""
+*CloseUI: *LaserEngravingPPI
+
+
+*CloseGroup: General
+
+
+
+*%
+*% End of "$Id: postscript.ppd,v 1.1.1.1 2000/08/24 19:23:13 goffioul Exp $".
+*%

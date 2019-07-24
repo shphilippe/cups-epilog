@@ -1,0 +1,46 @@
+#! /bin/bash
+
+if test "$#" = "0"; then
+	/home/away/cups-epilog/epilog
+	exit 0
+fi
+
+# Doesn't work if input is not a file, so you cannot use this with a filter before.
+# To fix, use cat - > temp_file
+INPUT="$6"
+# prefiltering only for particular PostScript "Creator" patterns
+# Get the options.
+
+LCF=`grep -oP "^%%BeginFeature: \*LaserCuttingFrequency f\K\w+" "$INPUT"`
+LCP=`grep -oP "^%%BeginFeature: \*LaserCuttingPower \K\w+" "$INPUT"`
+LCS=`grep -oP "^%%BeginFeature: \*LaserCuttingSpeed v\K\w+" "$INPUT"`
+LER=`grep -oP "^%%BeginFeature: \*LaserEngravingPPI \K\w+" "$INPUT"`
+LEP=`grep -oP "^%%BeginFeature: \*LaserEngravingPower \K\w+" "$INPUT"`
+LES=`grep -oP "^%%BeginFeature: \*LaserEngravingSpeed \K\w+" "$INPUT"`
+
+if [ "x$LCF" == "x" ]; then
+	LCF="5000"
+fi
+if [ "x$LCP" == "x" ]; then
+	LCP="100"
+fi
+if [ "x$LCS" == "x" ]; then
+        LCS="100"
+fi
+if [ "x$LER" == "x" ]; then
+        LER="300"
+fi
+if [ "x$LEP" == "x" ]; then
+        LEP="10"
+fi
+if [ "x$LES" == "x" ]; then
+        LES="100"
+fi
+
+
+#Let's run now the real driver
+export DEVICE_URI="$DEVICE_URI/rp=$LEP/rs=$LES/vp=$LCP/vs=$LCS/vf=$LCF/r=$LER/rm=mono/af=0"
+/home/away/cups-epilog/epilog "$1" "$2" "$3" "$4" "$5" "$6"
+
+
+ 
